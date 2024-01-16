@@ -164,9 +164,81 @@ label {
         font-weight: 600;
     }
 
+    #convert {
+        position: relative;
+        left: 12rem;
+    }
+
     #result {
         position: relative;
         top: 2rem;
         right: -15rem;
+    }
+}
+
+@media (max-width: 420px) {
+    #convert {
+        position: relative;
+        left: 10rem;
+    }
+
+    #result {
+        position: relative;
+        right: -13rem;
+    }    
+
+}
+
+@media (max-width: 380px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        margin-left: -5rem;
+    }
+
+    #from{
+        position: relative;
+        left: -2rem;
+    }
+
+    .to label {
+        position: relative;
+        left: 3rem;
+    }
+
+    #convert {
+        position: relative;
+        left: 22rem;    
+    }
+
+    #result {
+        position: relative;
+        left: 20rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .amount, .from, .to {
+        display: flex;
+        flex-direction: column;        
+    }
+
+    #convert {
+        position: relative;
+        left: 10rem;
+    }
+
+    #result {
+        position: relative;
+        left: 10rem;
+    }
+}
+
+@media (max-width: 220px) {
+    #result {
+        position: relative;
+        left: 5rem;
     }
 }
