@@ -2,12 +2,13 @@ let convertFrom = document.getElementById("from");
 let convertTo = document.getElementById("to");
 let amountInput = document.getElementById("amount");
 let convertedAmount;
-let exchangeRates; // Updated variable name to store exchange rates
+let exchangeRates; 
 let isFirstTime = true;
-let selectedFromCurrency; // Variable to store the selected "convert from" currency
+let convertFromCurrency; 
+let currencies;
 
 function getCurrencies() {
-    fetch(`https://api.fastforex.io/fetch-all?api_key=c08c586352-6a9807a75f-s7a3f5`)
+    return fetch(`https://api.fastforex.io/fetch-all?api_key=c08c586352-6a9807a75f-s7a3f5`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -15,24 +16,21 @@ function getCurrencies() {
             return response.json();
         })
         .then(data => {
-            const currencies = data.results;
-            exchangeRates = currencies; // Update exchangeRates with fetched data
+            currencies = data.results;
             const dataList = document.getElementById("fromOptions");
 
-            // Clear the existing options
             dataList.innerHTML = "";
 
-            for (const currencyCode in currencies) {
-                if (currencies.hasOwnProperty(currencyCode)) {
+            for (const currency in currencies) {
+                if (currencies.hasOwnProperty(currency)) {
                     const option = document.createElement("option");
-                    option.value = currencyCode;
+                    option.value = currency;
                     dataList.appendChild(option);
                 }
             }
 
-            // Set the "convert from" value only if not the first time
             if (!isFirstTime) {
-                convertFrom.value = selectedFromCurrency;
+                convertFrom.value = convertFromCurrency;
             }
         })
         .catch(error => {
@@ -40,29 +38,34 @@ function getCurrencies() {
         });
 }
 
+document.getElementById("convert").addEventListener("click", async (event) => {
+    await getCurrencies();
+    convertFromCurrency = convertFrom.value;
 
-// Event listener for the "convert" button
-document.getElementById("convert").addEventListener("click", (event) => {
-    if (amountInput.value == 0 || amountInput.value == null){
-        window.confirm("Please enter the amount to be converted.")
+    if (amountInput.value <= 0 || amountInput.value.trim() === '' || convertFromCurrency === "") {
+        Swal.fire({
+            title: 'Invalid amount or currency',
+            text: "Enter the amount and the currency you're converting from to proceed.",
+        });
+    } else {
+        exchangeRate = currencies[convertFromCurrency];
+        getValue(parseFloat(amountInput.value), exchangeRate);
     }
-    getCurrencies(event);
-    const selectedFromCurrency = convertFrom.value;
-    exchangeRate = exchangeRates[selectedFromCurrency];
-    getValue(parseFloat(amountInput.value), exchangeRate);
 });
 
-
-getCurrencies();
-
 function getValue(amount, exchangeRate) {
-    if (exchangeRate >= 1) {
+    if (amount <= 0 || isNaN(amount) || isNaN(exchangeRate)) {
+        convertedAmount = "";
+    } else if (exchangeRate >= 1) {
         convertedAmount = amount / exchangeRate;
     } else {
         convertedAmount = amount * exchangeRate;
     }
-    document.getElementById("result").value = convertedAmount.toFixed(2);
+    document.getElementById("result").value = '$' + convertedAmount.toFixed(2);
 }
+
+getCurrencies();
+
 
 var typed = new Typed('.footer', {
     strings: ['Generated with ❤️ by Islam Khairy'],
