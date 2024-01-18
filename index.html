@@ -10,23 +10,25 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.3/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
-    <div class="container mx-auto px-5 md:container">
-        <div class="amount">
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" min="0" required>
+    <div class="container mx-auto pb-8">        
+        <div class="sub-container">
+            <div class="from">
+                <label for="from">From:</label>
+                <input list="fromCurrencies" id="from">
+                <datalist id="fromCurrencies"></datalist>
+            </div>
+            <div class="to">
+                <label for="to">to:</label>
+                <input list="toCurrencies" id="to">
+                <datalist id="toCurrencies"></datalist>
+            </div>
+            <div class="amount">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" min="0" required>
+            </div>
+            <button id="convert">convert</button>
+            <input type="text" id="result" placeholder="0" readonly>
         </div>
-        <div class="from">
-            <label for="from">From:</label>
-            <input list="fromCurrencies" id="from">
-            <datalist id="fromCurrencies"></datalist>
-        </div>
-        <div class="to">
-            <label for="to">to:</label>
-            <input list="toCurrencies" id="to">
-            <datalist id="toCurrencies"></datalist>
-        </div>
-        <button id="convert">convert</button>
-        <input type="text" id="result" placeholder="0" readonly>
         <footer class="footer"></footer>
     </div>   
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
