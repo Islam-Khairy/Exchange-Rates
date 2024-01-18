@@ -5,6 +5,7 @@ let convertedAmount;
 let exchangeRates; 
 let isFirstTime = true;
 let convertFromCurrency; 
+let convertToCurrency; 
 let currencies;
 
 function getCurrencies() {
@@ -17,20 +18,25 @@ function getCurrencies() {
         })
         .then(data => {
             currencies = data.results;
-            const dataList = document.getElementById("fromOptions");
+            const fromDataList = document.getElementById("fromCurrencies");
+            const toDataList = document.getElementById("toCurrencies");
 
-            dataList.innerHTML = "";
+            fromDataList.innerHTML = "";
+            toDataList.innerHTML = "";
 
             for (const currency in currencies) {
                 if (currencies.hasOwnProperty(currency)) {
                     const option = document.createElement("option");
                     option.value = currency;
-                    dataList.appendChild(option);
+                    fromDataList.appendChild(option);
+                    toDataList.appendChild(option.cloneNode(true));
                 }
             }
+            
 
             if (!isFirstTime) {
                 convertFrom.value = convertFromCurrency;
+                convertTo.value = convertToCurrency;
             }
         })
         .catch(error => {
@@ -41,31 +47,30 @@ function getCurrencies() {
 document.getElementById("convert").addEventListener("click", async (event) => {
     await getCurrencies();
     convertFromCurrency = convertFrom.value;
+    convertToCurrency = convertTo.value;
 
-    if (amountInput.value <= 0 || amountInput.value.trim() === '' || convertFromCurrency === "") {
+    if (amountInput.value <= 0 || amountInput.value.trim() === '' || convertFromCurrency === "" || convertToCurrency === "") {
         Swal.fire({
             title: 'Invalid amount or currency',
-            text: "Enter the amount and the currency you're converting from to proceed.",
+            text: 'Enter the amount, source currency, and target currency to proceed.',
         });
     } else {
-        exchangeRate = currencies[convertFromCurrency];
-        getValue(parseFloat(amountInput.value), exchangeRate);
+        fromExchangeRate = currencies[convertFromCurrency];
+        toExchangeRate = currencies[convertToCurrency];
+        getValue(parseFloat(amountInput.value), fromExchangeRate, toExchangeRate);
     }
 });
 
-function getValue(amount, exchangeRate) {
-    if (amount <= 0 || isNaN(amount) || isNaN(exchangeRate)) {
+function getValue(amount, fromExchangeRate, toExchangeRate) {
+    if (amount <= 0 || isNaN(amount) || isNaN(fromExchangeRate) || isNaN(toExchangeRate)) {
         convertedAmount = "";
-    } else if (exchangeRate >= 1) {
-        convertedAmount = amount / exchangeRate;
     } else {
-        convertedAmount = amount * exchangeRate;
+        convertedAmount = amount * (toExchangeRate / fromExchangeRate);
     }
-    document.getElementById("result").value = '$' + convertedAmount.toFixed(2);
+    document.getElementById("result").value = convertedAmount.toFixed(2);
 }
 
 getCurrencies();
-
 
 var typed = new Typed('.footer', {
     strings: ['Generated with ❤️ by Islam Khairy'],

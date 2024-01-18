@@ -56,7 +56,7 @@ label {
 #amount, #from, #to {    
     width: 20rem;
     height: 4rem;
-    padding: .5rem .2rem;
+    padding: .5rem;
     font-size: 1.8rem;
     font-weight: 600;
     background: transparent;
