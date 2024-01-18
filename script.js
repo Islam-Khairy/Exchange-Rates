@@ -2,7 +2,6 @@ let convertFrom = document.getElementById("from");
 let convertTo = document.getElementById("to");
 let amountInput = document.getElementById("amount");
 let convertedAmount = 0; 
-let exchangeRates;
 let isFirstTime = true;
 let convertFromCurrency;
 let convertToCurrency;
@@ -183,7 +182,7 @@ function getCurrencies() {
                     const optionFrom = document.createElement("option");
                     const optionTo = document.createElement("option");
 
-                    const countryName = countryNames[currency] || 'Unknown Country';
+                    const countryName = countryNames[currency];
                     optionFrom.value = `${countryName} - ${currency}`;
                     optionTo.value = `${countryName} - ${currency}`;
 
@@ -205,13 +204,18 @@ function getCurrencies() {
 
 document.getElementById("convert").addEventListener("click", async (event) => {
     await getCurrencies();
-    convertFromCurrency = convertFrom.value.split(' - ')[1]; 
+    convertFromCurrency = convertFrom.value.split(' - ')[1];
     convertToCurrency = convertTo.value.split(' - ')[1];
 
-    if (amountInput.value <= 0 || amountInput.value.trim() === '' || convertFromCurrency === "" || convertToCurrency === "") {
+    if (
+        amountInput.value <= 0 ||
+        amountInput.value.trim() === '' ||
+        !currencies.hasOwnProperty(convertFromCurrency) ||
+        !currencies.hasOwnProperty(convertToCurrency)
+    ) {
         Swal.fire({
             title: 'Invalid amount or currency',
-            text: 'Enter the amount, source currency, and target currency to proceed.',
+            text: 'Enter a valid amount, select the source and target currencies from the list to proceed.',
         });
     } else {
         fromExchangeRate = currencies[convertFromCurrency];
@@ -219,6 +223,7 @@ document.getElementById("convert").addEventListener("click", async (event) => {
         getValue(parseFloat(amountInput.value), fromExchangeRate, toExchangeRate);
     }
 });
+
 
 
 function getValue(amount, fromExchangeRate, toExchangeRate) {
