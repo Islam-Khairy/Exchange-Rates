@@ -1,10 +1,13 @@
-# Overview: User-friendly web app for accurate and hassle-free currency exchange rate calculations.
+# Overview: 
+User-friendly web app for accurate and hassle-free currency exchange rate calculations.
+
 # Features:
   - One-click conversion for quick results.
   - Support for a diverse range of currencies.
   - Precision ensured for accurate conversions.
 
-# Technologies: Developed using HTML, CSS, JavaScript, and powered by the FastForex API.
+# Technologies: 
+Developed using HTML, CSS, JavaScript, and powered by the FastForex API.
 
 # Usage: 
   1. Enter the desired amount.
