@@ -6,6 +6,11 @@
     outline: none;
 }
 
+:root {
+    --text-white-color:#e9e3e3;
+    --border-color: #bdbbbb;
+}
+
 html {
     font-size: 62.5%;
 }
@@ -26,7 +31,7 @@ body {
 .container::before {
 	content: "";
     position: absolute;
-    background: rgba(85, 84, 84, 0.6);
+    background: rgba(85, 84, 84, 0.7);
     top: 0;
     left: 0;
     height: 100%;
@@ -63,7 +68,7 @@ body {
 label {
     font-size: 3rem;
     font-weight: 700;
-    color: #e9e3e3;
+    color: var(--text-white-color);
 }
 
 #from, #to, #amount {       
@@ -71,7 +76,7 @@ label {
     font-size: 1.8rem;
     font-weight: 600;
     background: transparent;
-    border: solid .2rem #bdbbbb;
+    border: solid .2rem var(--border-color);
     border-radius: .8rem;
     box-shadow:  0 2rem 1rem rgba(0, 0, 0, 0.4);
     text-align: center;
@@ -93,9 +98,9 @@ label {
     padding: .5rem 1rem;
     font-size: 2.2rem;
     border-radius: 1.2rem;
-    border: .2rem solid #bdbbbb;
+    border: .2rem solid var(--border-color);
     font-weight: 600;
-    color: #e9e3e3;
+    color: var(--text-white-color);
     background-color: transparent;
 }
 
@@ -107,11 +112,11 @@ label {
 #result {
     height: 5rem;
     max-width: 100%;
-    font-size: 2rem;
-    font-weight: 500;
+    font-size: 2.2rem;
+    font-weight: 700;
     text-align: center;
     background: transparent;
-    border: solid .2rem #bdbbbb;
+    border: solid .2rem var(--border-color);
     border-radius: 1rem;
     box-shadow: 0 2rem 1rem rgba(0, 0, 0, 0.4);
 }
