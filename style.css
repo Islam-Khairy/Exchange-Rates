@@ -119,6 +119,7 @@ label {
     border: solid .2rem var(--border-color);
     border-radius: 1rem;
     box-shadow: 0 2rem 1rem rgba(0, 0, 0, 0.4);
+    color: var(--text-white-color);
 }
 
 
