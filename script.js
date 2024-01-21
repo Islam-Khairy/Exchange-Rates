@@ -1,5 +1,5 @@
-let convertFrom = document.getElementById("from");
-let convertTo = document.getElementById("to");
+let convertFromInput = document.getElementById("from");
+let convertToInput = document.getElementById("to");
 let amountInput = document.getElementById("amount");
 let convertedAmount = 0; 
 let isFirstTime = true;
@@ -162,7 +162,7 @@ const countryNames = {
 
 
 function getCurrencies() {
-    return fetch(`https://api.fastforex.io/fetch-all?api_key=c08c586352-6a9807a75f-s7a3f5`)
+    return fetch(`https://v6.exchangerate-api.com/v6/baa3a9e2509c9b674a3486a2/latest/usd?api_key=e62be596`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -170,7 +170,7 @@ function getCurrencies() {
             return response.json();
         })
         .then(data => {
-            currencies = data.results;
+            currencies = data.conversion_rates;
             const fromDataList = document.getElementById("fromCurrencies");
             const toDataList = document.getElementById("toCurrencies");
 
@@ -184,7 +184,9 @@ function getCurrencies() {
 
                     const countryName = countryNames[currency];
                     optionFrom.value = `${countryName} - ${currency}`;
+                    optionFrom.textContent = `${countryName} - ${currency}`;
                     optionTo.value = `${countryName} - ${currency}`;
+                    optionTo.textContent = `${countryName} - ${currency}`;
 
                     fromDataList.appendChild(optionFrom);
                     toDataList.appendChild(optionTo);
@@ -192,8 +194,8 @@ function getCurrencies() {
             }
 
             if (!isFirstTime) {
-                convertFrom.value = convertFromCurrency;
-                convertTo.value = convertToCurrency;
+                convertFromInput.value = convertFromCurrency;
+                convertToInput.value = convertToCurrency;
             }
         })
         .catch(error => {
@@ -204,8 +206,8 @@ function getCurrencies() {
 
 document.getElementById("convert").addEventListener("click", async (event) => {
     await getCurrencies();
-    convertFromCurrency = convertFrom.value.split(' - ')[1];
-    convertToCurrency = convertTo.value.split(' - ')[1];
+    convertFromCurrency = convertFromInput.value.split(' - ')[1];
+    convertToCurrency = convertToInput.value.split(' - ')[1];
 
     if (
         amountInput.value <= 0 ||
