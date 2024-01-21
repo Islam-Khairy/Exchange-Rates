@@ -7,8 +7,7 @@ User-friendly web app for accurate and hassle-free currency exchange rate calcul
   - Precision ensured for accurate conversions.
 
 # Technologies: 
-Developed using HTML, CSS, JavaScript, and powered by the FastForex API.
-
+Developed using HTML, CSS, JavaScript.
 # Usage: 
   1. Enter the desired amount.
   2. Select the source and target currencies.
