@@ -209,24 +209,40 @@ document.getElementById("convert").addEventListener("click", async (event) => {
     convertFromCurrency = convertFromInput.value.split(' - ')[1];
     convertToCurrency = convertToInput.value.split(' - ')[1];
 
-    if (
-        amountInput.value <= 0 ||
-        amountInput.value.trim() === '' ||
-        !currencies.hasOwnProperty(convertFromCurrency) ||
-        !currencies.hasOwnProperty(convertToCurrency)
-    ) {
+    let title, text;
+
+    if (!navigator.onLine) {   
+        spinner.style.display = "none";     
+        title = 'Connection Error';
+        text = 'Please check your internet connection and try again.';
+    } else if (amountInput.value.trim() === '' || amountInput.value <= 0) {
         spinner.style.display = "none";
-        Swal.fire({            
-            title: 'Invalid amount or currency',
-            text: 'Enter a valid amount, select the source and target currencies from the list to proceed.',
-        });
+        title = 'Invalid amount';
+        text = 'Please enter a valid amount to proceed.';
+    } else if (!currencies.hasOwnProperty(convertFromCurrency)) {
+        spinner.style.display = "none";
+        title = 'Currency not selected';
+        text = 'Please select the source currency from the list to proceed.';
+    } else if (!currencies.hasOwnProperty(convertToCurrency)) {
+        spinner.style.display = "none";
+        title = 'Currency not selected';
+        text = 'Please select the target currency from the list to proceed.';
     } else {
         spinner.style.display = "none";
         fromExchangeRate = currencies[convertFromCurrency];
         toExchangeRate = currencies[convertToCurrency];
         getValue(parseFloat(amountInput.value), fromExchangeRate, toExchangeRate);
     }
+
+    if (title && text) {
+        Swal.fire({
+            icon: 'error',
+            title: title,
+            text: text
+        });
+    }
 });
+
 
 convertFromInput.addEventListener("mousedown", (event) =>{
     event.preventDefault();
