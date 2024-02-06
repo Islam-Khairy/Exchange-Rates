@@ -1,6 +1,7 @@
 let convertFromInput = document.getElementById("from");
 let convertToInput = document.getElementById("to");
 let amountInput = document.getElementById("amount");
+let spinner = document.getElementById("spinner");
 let convertedAmount = 0; 
 let isFirstTime = true;
 let convertFromCurrency;
@@ -160,7 +161,6 @@ const countryNames = {
     'ZMW': 'Zambia',
 };
 
-
 function getCurrencies() {
     return fetch(`https://v6.exchangerate-api.com/v6/baa3a9e2509c9b674a3486a2/latest/usd?api_key=e62be596`)
         .then(response => {
@@ -203,8 +203,8 @@ function getCurrencies() {
         });
 }
 
-
 document.getElementById("convert").addEventListener("click", async (event) => {
+    spinner.style.display = "block";
     await getCurrencies();
     convertFromCurrency = convertFromInput.value.split(' - ')[1];
     convertToCurrency = convertToInput.value.split(' - ')[1];
@@ -215,18 +215,38 @@ document.getElementById("convert").addEventListener("click", async (event) => {
         !currencies.hasOwnProperty(convertFromCurrency) ||
         !currencies.hasOwnProperty(convertToCurrency)
     ) {
-        Swal.fire({
+        spinner.style.display = "none";
+        Swal.fire({            
             title: 'Invalid amount or currency',
             text: 'Enter a valid amount, select the source and target currencies from the list to proceed.',
         });
     } else {
+        spinner.style.display = "none";
         fromExchangeRate = currencies[convertFromCurrency];
         toExchangeRate = currencies[convertToCurrency];
         getValue(parseFloat(amountInput.value), fromExchangeRate, toExchangeRate);
     }
 });
 
+convertFromInput.addEventListener("mousedown", (event) =>{
+    event.preventDefault();
+    convertFromInput.value = "";
+    const options = document.getElementById('fromCurrencies').querySelectorAll('option');
+    options.forEach(option => {
+        option.style.display = 'block';
+    });
+    convertFromInput.focus();
+});
 
+convertToInput.addEventListener("mousedown", (event) =>{
+    event.preventDefault();
+    convertToInput.value = "";
+    const options = document.getElementById('toCurrencies').querySelectorAll('option');
+    options.forEach(option => {
+        option.style.display = 'block';
+    });
+    convertToInput.focus();
+});
 
 function getValue(amount, fromExchangeRate, toExchangeRate) {
     if (amount <= 0 || isNaN(amount) || isNaN(fromExchangeRate) || isNaN(toExchangeRate)) {
@@ -239,8 +259,6 @@ function getValue(amount, fromExchangeRate, toExchangeRate) {
     document.getElementById("result").value = resultText;
 }
 
-
-
 getCurrencies();
 
 var typed = new Typed('.footer', {
@@ -250,3 +268,5 @@ var typed = new Typed('.footer', {
     backDelay: 2000,
     loop: true
 });
+
+typed.cursor.style.display = 'none';
