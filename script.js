@@ -1,5 +1,7 @@
 let convertFromInput = document.getElementById("from");
 let convertToInput = document.getElementById("to");
+let fromDataList = document.getElementById("fromCurrencies");
+let toDataList = document.getElementById("toCurrencies");
 let amountInput = document.getElementById("amount");
 let spinner = document.getElementById("spinner");
 let convertedAmount = 0; 
@@ -170,9 +172,7 @@ function getCurrencies() {
             return response.json();
         })
         .then(data => {
-            currencies = data.conversion_rates;
-            const fromDataList = document.getElementById("fromCurrencies");
-            const toDataList = document.getElementById("toCurrencies");
+            currencies = data.conversion_rates;            
 
             fromDataList.innerHTML = "";
             toDataList.innerHTML = "";
@@ -198,9 +198,6 @@ function getCurrencies() {
                 convertToInput.value = convertToCurrency;
             }
         })
-        .catch(error => {
-            console.error('Error fetching currencies:', error);
-        });
 }
 
 document.getElementById("convert").addEventListener("click", async (event) => {
@@ -212,21 +209,14 @@ document.getElementById("convert").addEventListener("click", async (event) => {
     let title, text;
 
     if (!navigator.onLine) {   
-        spinner.style.display = "none";     
         title = 'Connection Error';
         text = 'Please check your internet connection and try again.';
     } else if (amountInput.value.trim() === '' || amountInput.value <= 0) {
-        spinner.style.display = "none";
         title = 'Invalid amount';
         text = 'Please enter a valid amount to proceed.';
-    } else if (!currencies.hasOwnProperty(convertFromCurrency)) {
-        spinner.style.display = "none";
+    } else if (!currencies.hasOwnProperty(convertFromCurrency) || !currencies.hasOwnProperty(convertToCurrency)) {
         title = 'Currency not selected';
-        text = 'Please select the source currency from the list to proceed.';
-    } else if (!currencies.hasOwnProperty(convertToCurrency)) {
-        spinner.style.display = "none";
-        title = 'Currency not selected';
-        text = 'Please select the target currency from the list to proceed.';
+        text = 'Please select both the source and target currencies from the list to proceed.';
     } else {
         spinner.style.display = "none";
         fromExchangeRate = currencies[convertFromCurrency];
@@ -235,6 +225,7 @@ document.getElementById("convert").addEventListener("click", async (event) => {
     }
 
     if (title && text) {
+        spinner.style.display = "none";
         Swal.fire({
             icon: 'error',
             title: title,
@@ -243,11 +234,10 @@ document.getElementById("convert").addEventListener("click", async (event) => {
     }
 });
 
-
 convertFromInput.addEventListener("mousedown", (event) =>{
     event.preventDefault();
     convertFromInput.value = "";
-    const options = document.getElementById('fromCurrencies').querySelectorAll('option');
+    const options = fromDataList.querySelectorAll('option');
     options.forEach(option => {
         option.style.display = 'block';
     });
@@ -257,7 +247,7 @@ convertFromInput.addEventListener("mousedown", (event) =>{
 convertToInput.addEventListener("mousedown", (event) =>{
     event.preventDefault();
     convertToInput.value = "";
-    const options = document.getElementById('toCurrencies').querySelectorAll('option');
+    const options = toDataList.querySelectorAll('option');
     options.forEach(option => {
         option.style.display = 'block';
     });
