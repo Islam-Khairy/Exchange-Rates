@@ -234,6 +234,36 @@ convertToInput.addEventListener("input", (event) => {
     }
 });
 
+convertFromInput.addEventListener("keydown", (event) => {
+    if (event.key === 'Backspace') {
+        const inputValue = convertFromInput.value.trim();
+        if (inputValue === "") {
+            convertFromCurrency = null;
+        } else {
+            const lastIndex = inputValue.lastIndexOf(' - ');
+            if (lastIndex !== -1) {
+                convertFromInput.value = inputValue.substring(0, lastIndex);
+                event.preventDefault(); 
+            }
+        }
+    }
+});
+
+convertToInput.addEventListener("keydown", (event) => {
+    if (event.key === 'Backspace') {
+        const inputValue = convertToInput.value.trim();
+        if (inputValue === "") {
+            convertToCurrency = null;
+        } else {
+            const lastIndex = inputValue.lastIndexOf(' - ');
+            if (lastIndex !== -1) {
+                convertToInput.value = inputValue.substring(0, lastIndex);
+                event.preventDefault();
+            }
+        }
+    }
+});
+
 document.getElementById("convert").addEventListener("click", async (event) => {
     spinner.style.display = "block";
     await getCurrencies();
