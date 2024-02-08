@@ -242,7 +242,7 @@ convertFromInput.addEventListener("keydown", (event) => {
         } else {
             const lastIndex = inputValue.lastIndexOf(' - ');
             if (lastIndex !== -1) {
-                convertFromInput.value = inputValue.substring(0, lastIndex);
+                convertFromInput.value = inputValue.substring(0, lastIndex-1);
                 event.preventDefault(); 
             }
         }
@@ -257,7 +257,7 @@ convertToInput.addEventListener("keydown", (event) => {
         } else {
             const lastIndex = inputValue.lastIndexOf(' - ');
             if (lastIndex !== -1) {
-                convertToInput.value = inputValue.substring(0, lastIndex);
+                convertToInput.value = inputValue.substring(0, lastIndex-1);
                 event.preventDefault();
             }
         }
