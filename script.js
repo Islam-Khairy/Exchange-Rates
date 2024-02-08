@@ -172,7 +172,7 @@ function getCurrencies() {
             return response.json();
         })
         .then(data => {
-            currencies = data.conversion_rates;            
+            currencies = data.conversion_rates;
 
             fromDataList.innerHTML = "";
             toDataList.innerHTML = "";
@@ -200,6 +200,40 @@ function getCurrencies() {
         })
 }
 
+convertFromInput.addEventListener("input", (event) => {
+    const input = event.target.value.toLowerCase(); 
+    const countryCurrencyPair = input.split(' - ');
+    const enteredCountry = countryCurrencyPair[0].trim();
+    for (const currency in countryNames) {
+        if (countryNames.hasOwnProperty(currency)) {
+            const countryName = countryNames[currency].toLowerCase();
+            if (countryName === enteredCountry) {
+                convertFromInput.value = `${countryNames[currency]} - ${currency}`;
+                convertFromCurrency = currency;
+                convertFromInput.dispatchEvent(new Event('change')); 
+                return;
+            }
+        }
+    }
+});
+
+convertToInput.addEventListener("input", (event) => {
+    const input = event.target.value.toLowerCase(); 
+    const countryCurrencyPair = input.split(' - ');
+    const enteredCountry = countryCurrencyPair[0].trim();
+    for (const currency in countryNames) {
+        if (countryNames.hasOwnProperty(currency)) {
+            const countryName = countryNames[currency].toLowerCase();
+            if (countryName === enteredCountry) {
+                convertToInput.value = `${countryNames[currency]} - ${currency}`;
+                convertToCurrency = currency;
+                convertToInput.dispatchEvent(new Event('change'));
+                return;
+            }
+        }
+    }
+});
+
 document.getElementById("convert").addEventListener("click", async (event) => {
     spinner.style.display = "block";
     await getCurrencies();
@@ -214,9 +248,12 @@ document.getElementById("convert").addEventListener("click", async (event) => {
     } else if (amountInput.value.trim() === '' || amountInput.value <= 0) {
         title = 'Invalid amount';
         text = 'Please enter a valid amount to proceed.';
-    } else if (!currencies.hasOwnProperty(convertFromCurrency) || !currencies.hasOwnProperty(convertToCurrency)) {
+    } else if (!currencies.hasOwnProperty(convertFromCurrency)) {
         title = 'Currency not selected';
-        text = 'Please select both the source and target currencies from the list to proceed.';
+        text = 'Please select the source currency from the list to proceed.';
+    } else if (!currencies.hasOwnProperty(convertToCurrency)) {
+        title = 'Currency not selected';
+        text = 'Please select the target currency from the list to proceed.';
     } else {
         spinner.style.display = "none";
         fromExchangeRate = currencies[convertFromCurrency];
