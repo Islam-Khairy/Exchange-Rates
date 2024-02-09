@@ -212,10 +212,21 @@ function handleDeleteKeyPress(inputField) {
     }
 }
 
-function handleInputAndDelete(inputField, currencyStorage) {
-    const input = inputField.value.toLowerCase(); 
+function handleInput(inputField, currencyStorage) {
+    const input = inputField.value.toLowerCase().trim(); 
     const countryCurrencyPair = input.split(' - ');
     const enteredCountry = countryCurrencyPair[0].trim();
+    
+    if (input === "") {
+        convertFromCurrency = null;
+    }
+    
+    if (input.length < inputField.lastInputLength) {
+        handleDeleteKeyPress(inputField);
+    }
+    
+    inputField.lastInputLength = input.length;
+    
     for (const currency in currencyStorage) {
         if (currencyStorage.hasOwnProperty(currency)) {
             const countryName = currencyStorage[currency].toLowerCase();
@@ -231,33 +242,46 @@ function handleInputAndDelete(inputField, currencyStorage) {
             }
         }
     }
-    handleDeleteKeyPress(inputField);
 }
-
-convertFromInput.addEventListener("input", (event) => {
-    handleInputAndDelete(convertFromInput, countryNames);
-});
 
 convertFromInput.addEventListener("keydown", (event) => {
     if (event.key === 'Backspace' || event.key === 'Delete') {
         handleDeleteKeyPress(convertFromInput);
-    } else if (event.key === 'Escape') {
-        convertFromInput.value = "";
-        convertFromCurrency = null;
     }
 });
 
-convertToInput.addEventListener("input", (event) => {
-    handleInputAndDelete(convertToInput, countryNames);
+convertFromInput.addEventListener("input", (event) => {
+    handleInput(convertFromInput, countryNames);
+});
+
+convertFromInput.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+    convertFromInput.value = "";
+    const options = fromDataList.querySelectorAll('option');
+    options.forEach(option => {
+        option.style.display = 'block';
+    });
+    convertFromInput.focus();
 });
 
 convertToInput.addEventListener("keydown", (event) => {
     if (event.key === 'Backspace' || event.key === 'Delete') {
         handleDeleteKeyPress(convertToInput);
-    } else if (event.key === 'Escape') {
-        convertToInput.value = "";
-        convertToCurrency = null;
     }
+});
+
+convertToInput.addEventListener("input", (event) => {
+    handleInput(convertToInput, countryNames);
+});
+
+convertToInput.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+    convertToInput.value = "";
+    const options = toDataList.querySelectorAll('option');
+    options.forEach(option => {
+        option.style.display = 'block';
+    });
+    convertToInput.focus();
 });
 
 document.getElementById("convert").addEventListener("click", async (event) => {
@@ -295,26 +319,6 @@ document.getElementById("convert").addEventListener("click", async (event) => {
             text: text
         });
     }
-});
-
-convertFromInput.addEventListener("mousedown", (event) =>{
-    event.preventDefault();
-    convertFromInput.value = "";
-    const options = fromDataList.querySelectorAll('option');
-    options.forEach(option => {
-        option.style.display = 'block';
-    });
-    convertFromInput.focus();
-});
-
-convertToInput.addEventListener("mousedown", (event) =>{
-    event.preventDefault();
-    convertToInput.value = "";
-    const options = toDataList.querySelectorAll('option');
-    options.forEach(option => {
-        option.style.display = 'block';
-    });
-    convertToInput.focus();
 });
 
 function getValue(amount, fromExchangeRate, toExchangeRate) {
