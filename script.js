@@ -239,6 +239,7 @@ convertFromInput.addEventListener("keydown", (event) => {
     switch (event.key) {
         case 'Backspace':
         case 'Delete':
+        case 'Clear':
             if (inputValue === "") {
                 convertFromCurrency = null;
             } else {
@@ -261,6 +262,7 @@ convertToInput.addEventListener("keydown", (event) => {
     switch (event.key) {
         case 'Backspace':
         case 'Delete':
+        case 'Clear':
             if (inputValue === "") {
                 convertToCurrency = null;
             } else {
