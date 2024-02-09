@@ -200,83 +200,63 @@ function getCurrencies() {
         })
 }
 
-convertFromInput.addEventListener("input", (event) => {
-    const input = event.target.value.toLowerCase(); 
+function handleDeleteKeyPress(inputField) {
+    const inputValue = inputField.value.trim();
+    if (inputValue === "") {
+        convertFromCurrency = null;
+    } else {
+        const lastIndex = inputValue.lastIndexOf(' - ');
+        if (lastIndex !== -1) {
+            inputField.value = inputValue.substring(0, lastIndex);
+        }
+    }
+}
+
+function handleInputAndDelete(inputField, currencyStorage) {
+    const input = inputField.value.toLowerCase(); 
     const countryCurrencyPair = input.split(' - ');
     const enteredCountry = countryCurrencyPair[0].trim();
-    for (const currency in countryNames) {
-        if (countryNames.hasOwnProperty(currency)) {
-            const countryName = countryNames[currency].toLowerCase();
+    for (const currency in currencyStorage) {
+        if (currencyStorage.hasOwnProperty(currency)) {
+            const countryName = currencyStorage[currency].toLowerCase();
             if (countryName === enteredCountry) {
-                convertFromInput.value = `${countryNames[currency]} - ${currency}`;
-                convertFromCurrency = currency;
-                convertFromInput.dispatchEvent(new Event('change')); 
+                inputField.value = `${currencyStorage[currency]} - ${currency}`;
+                if (inputField === convertFromInput) {
+                    convertFromCurrency = currency;
+                } else if (inputField === convertToInput) {
+                    convertToCurrency = currency;
+                }
+                inputField.dispatchEvent(new Event('change')); 
                 return;
             }
         }
+    }
+    handleDeleteKeyPress(inputField);
+}
+
+convertFromInput.addEventListener("input", (event) => {
+    handleInputAndDelete(convertFromInput, countryNames);
+});
+
+convertFromInput.addEventListener("keydown", (event) => {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+        handleDeleteKeyPress(convertFromInput);
+    } else if (event.key === 'Escape') {
+        convertFromInput.value = "";
+        convertFromCurrency = null;
     }
 });
 
 convertToInput.addEventListener("input", (event) => {
-    const input = event.target.value.toLowerCase(); 
-    const countryCurrencyPair = input.split(' - ');
-    const enteredCountry = countryCurrencyPair[0].trim();
-    for (const currency in countryNames) {
-        if (countryNames.hasOwnProperty(currency)) {
-            const countryName = countryNames[currency].toLowerCase();
-            if (countryName === enteredCountry) {
-                convertToInput.value = `${countryNames[currency]} - ${currency}`;
-                convertToCurrency = currency;
-                convertToInput.dispatchEvent(new Event('change'));
-                return;
-            }
-        }
-    }
-});
-
-convertFromInput.addEventListener("keydown", (event) => {
-    const inputValue = convertFromInput.value.trim();
-    switch (event.key) {
-        case 'Backspace':
-        case 'Delete':
-        case 'Clear':
-            if (inputValue === "") {
-                convertFromCurrency = null;
-            } else {
-                const lastIndex = inputValue.lastIndexOf(' - ');
-                if (lastIndex !== -1) {
-                    convertFromInput.value = inputValue.substring(0, lastIndex-1);
-                    event.preventDefault(); 
-                }
-            }
-            break;
-        case 'Escape':
-            convertFromInput.value = ""; 
-            convertFromCurrency = null; 
-            break;
-    }
+    handleInputAndDelete(convertToInput, countryNames);
 });
 
 convertToInput.addEventListener("keydown", (event) => {
-    const inputValue = convertToInput.value.trim();
-    switch (event.key) {
-        case 'Backspace':
-        case 'Delete':
-        case 'Clear':
-            if (inputValue === "") {
-                convertToCurrency = null;
-            } else {
-                const lastIndex = inputValue.lastIndexOf(' - ');
-                if (lastIndex !== -1) {
-                    convertToInput.value = inputValue.substring(0, lastIndex-1);
-                    event.preventDefault(); 
-                }
-            }
-            break;
-        case 'Escape':
-            convertToInput.value = "";
-            convertToCurrency = null; 
-            break;
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+        handleDeleteKeyPress(convertToInput);
+    } else if (event.key === 'Escape') {
+        convertToInput.value = "";
+        convertToCurrency = null;
     }
 });
 
