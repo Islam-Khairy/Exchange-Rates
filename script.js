@@ -220,12 +220,18 @@ function handleInput(inputField, currencyStorage) {
     if (input === "") {
         convertFromCurrency = null;
     }
-    
-    if (input.length < inputField.lastInputLength) {
+        if (input.length < inputField.lastInputLength) {
         handleDeleteKeyPress(inputField);
     }
     
     inputField.lastInputLength = input.length;
+    
+    inputField.addEventListener("keyup", () => {
+        if (inputField.value.length < inputField.lastInputLength) {
+            handleDeleteKeyPress(inputField);
+        }
+        inputField.lastInputLength = inputField.value.length;
+    });
     
     for (const currency in currencyStorage) {
         if (currencyStorage.hasOwnProperty(currency)) {
