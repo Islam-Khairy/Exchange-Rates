@@ -9,6 +9,7 @@ let isFirstTime = true;
 let convertFromCurrency;
 let convertToCurrency;
 let currencies;
+let lastInputValue = "";
 
 const countryNames = {
     'AED': 'United Arab Emirates',
@@ -277,11 +278,17 @@ convertToInput.addEventListener("touchstart", (event) => {
 });
 
 convertFromInput.addEventListener("input", (event) => {
-    handleInput(convertFromInput, countryNames);
+    if (convertFromInput.value !== lastInputValue) {
+        handleInput(convertFromInput, countryNames);
+        lastInputValue = convertFromInput.value;
+    }
 });
 
 convertToInput.addEventListener("input", (event) => {
-    handleInput(convertToInput, countryNames);
+    if (convertToInput.value !== lastInputValue) {
+        handleInput(convertToInput, countryNames);
+        lastInputValue = convertToInput.value;
+    }
 });
 
 convertFromInput.addEventListener("keydown", (event) => {
