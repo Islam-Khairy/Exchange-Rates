@@ -163,41 +163,44 @@ const countryNames = {
     'ZMW': 'Zambia',
 };
 
-function getCurrencies() {
-    return fetch(`https://v6.exchangerate-api.com/v6/baa3a9e2509c9b674a3486a2/latest/usd?api_key=e62be596`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            currencies = data.conversion_rates;
+async function getCurrencies() {
+    try {
+        const response = await fetch(`https://v6.exchangerate-api.com/v6/baa3a9e2509c9b674a3486a2/latest/usd?api_key=e62be596`);
+        const data = await response.json();
+        currencies = data.conversion_rates;
+        
+        updateCurrencyOptions();
 
-            fromDataList.innerHTML = "";
-            toDataList.innerHTML = "";
+        if (!isFirstTime) {
+            convertFromInput.value = convertFromCurrency;
+            convertToInput.value = convertToCurrency;
+        }
+    } catch (error) {
+        console.error("Error fetching currencies:", error);
+    }
+}
 
-            for (const currency in currencies) {
-                if (currencies.hasOwnProperty(currency)) {
-                    const optionFrom = document.createElement("option");
-                    const optionTo = document.createElement("option");
+function updateCurrencyOptions() {
+    fromDataList.innerHTML = "";
+    toDataList.innerHTML = "";
 
-                    const countryName = countryNames[currency];
-                    optionFrom.value = `${countryName} - ${currency}`;
-                    optionFrom.textContent = `${countryName} - ${currency}`;
-                    optionTo.value = `${countryName} - ${currency}`;
-                    optionTo.textContent = `${countryName} - ${currency}`;
+    for (const currency in currencies) {
+        if (currencies.hasOwnProperty(currency)) {
+            const optionFrom = createOptionElement(currency);
+            const optionTo = createOptionElement(currency);
 
-                    fromDataList.appendChild(optionFrom);
-                    toDataList.appendChild(optionTo);
-                }
-            }
+            fromDataList.appendChild(optionFrom);
+            toDataList.appendChild(optionTo);
+        }
+    }
+}
 
-            if (!isFirstTime) {
-                convertFromInput.value = convertFromCurrency;
-                convertToInput.value = convertToCurrency;
-            }
-        })
+function createOptionElement(currency) {
+    const option = document.createElement("option");
+    const countryName = countryNames[currency];
+    option.value = `${countryName} - ${currency}`;
+    option.textContent = `${countryName} - ${currency}`;
+    return option;
 }
 
 function handleDeleteKeyPress(inputField) {
@@ -213,26 +216,9 @@ function handleDeleteKeyPress(inputField) {
 }
 
 function handleInput(inputField, currencyStorage) {
-    const input = inputField.value.toLowerCase().trim(); 
+    const input = inputField.value.toLowerCase();
     const countryCurrencyPair = input.split(' - ');
     const enteredCountry = countryCurrencyPair[0].trim();
-    
-    if (input === "") {
-        convertFromCurrency = null;
-    }
-        if (input.length < inputField.lastInputLength) {
-        handleDeleteKeyPress(inputField);
-    }
-    
-    inputField.lastInputLength = input.length;
-    
-    inputField.addEventListener("keyup", () => {
-        if (inputField.value.length < inputField.lastInputLength) {
-            handleDeleteKeyPress(inputField);
-        }
-        inputField.lastInputLength = inputField.value.length;
-    });
-    
     for (const currency in currencyStorage) {
         if (currencyStorage.hasOwnProperty(currency)) {
             const countryName = currencyStorage[currency].toLowerCase();
@@ -243,62 +229,86 @@ function handleInput(inputField, currencyStorage) {
                 } else if (inputField === convertToInput) {
                     convertToCurrency = currency;
                 }
-                inputField.dispatchEvent(new Event('change')); 
+                inputField.dispatchEvent(new Event('change'));
                 return;
             }
         }
     }
 }
 
-convertFromInput.addEventListener("keydown", (event) => {
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-        handleDeleteKeyPress(convertFromInput);
+function handleEscapeKey(inputField) {
+    inputField.value = "";
+    if (inputField === convertFromInput) {
+        convertFromCurrency = null;
+    } else if (inputField === convertToInput) {
+        convertToCurrency = null;
     }
+}
+
+function handleMouseDown(event, inputField, dataList) {
+    event.preventDefault();
+    inputField.value = "";
+    const options = dataList.querySelectorAll('option');
+    options.forEach(option => {
+        option.style.display = 'block';
+    });
+    inputField.focus();
+}
+
+function handleKeyDown(event, inputField) {
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+        handleDeleteKeyPress(inputField);
+    } else if (event.key === 'Escape') {
+        handleEscapeKey(inputField);
+    }
+}
+
+function handleTouchDelete(inputField) {
+    const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+    inputField.dispatchEvent(event);
+}
+
+convertFromInput.addEventListener("touchstart", (event) => {
+    handleTouchDelete(convertFromInput);
+});
+
+convertToInput.addEventListener("touchstart", (event) => {
+    handleTouchDelete(convertToInput);
 });
 
 convertFromInput.addEventListener("input", (event) => {
     handleInput(convertFromInput, countryNames);
 });
 
-convertFromInput.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-    convertFromInput.value = "";
-    const options = fromDataList.querySelectorAll('option');
-    options.forEach(option => {
-        option.style.display = 'block';
-    });
-    convertFromInput.focus();
-});
-
-convertToInput.addEventListener("keydown", (event) => {
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-        handleDeleteKeyPress(convertToInput);
-    }
-});
-
 convertToInput.addEventListener("input", (event) => {
     handleInput(convertToInput, countryNames);
 });
 
+convertFromInput.addEventListener("keydown", (event) => {
+    handleKeyDown(event, convertFromInput);
+});
+
+convertToInput.addEventListener("keydown", (event) => {
+    handleKeyDown(event, convertToInput);
+});
+
+convertFromInput.addEventListener("mousedown", (event) => {
+    handleMouseDown(event, convertFromInput, fromDataList);
+});
+
 convertToInput.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-    convertToInput.value = "";
-    const options = toDataList.querySelectorAll('option');
-    options.forEach(option => {
-        option.style.display = 'block';
-    });
-    convertToInput.focus();
+    handleMouseDown(event, convertToInput, toDataList);
 });
 
 document.getElementById("convert").addEventListener("click", async (event) => {
+    event.preventDefault();
     spinner.style.display = "block";
     await getCurrencies();
     convertFromCurrency = convertFromInput.value.split(' - ')[1];
     convertToCurrency = convertToInput.value.split(' - ')[1];
 
     let title, text;
-
-    if (!navigator.onLine) {   
+    if (!navigator.onLine) {
         title = 'Connection Error';
         text = 'Please check your internet connection and try again.';
     } else if (amountInput.value.trim() === '' || amountInput.value <= 0) {
