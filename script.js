@@ -204,14 +204,15 @@ function createOptionElement(currency) {
     return option;
 }
 
-function handleDeleteKeyPress(inputField) {
+function handleDeleteInput(inputField) {
     const inputValue = inputField.value.trim();
     if (inputValue === "") {
         convertFromCurrency = null;
+        convertToCurrency = null;
     } else {
         const lastIndex = inputValue.lastIndexOf(' - ');
         if (lastIndex !== -1) {
-            inputField.value = inputValue.substring(0, lastIndex);
+            inputField.value = inputValue.substring(0, lastIndex-1);
         }
     }
 }
@@ -238,6 +239,7 @@ function handleInput(inputField, currencyStorage) {
 }
 
 function handleEscapeKey(inputField) {
+    console.log("Handling Escape key");
     inputField.value = "";
     if (inputField === convertFromInput) {
         convertFromCurrency = null;
@@ -256,47 +258,34 @@ function handleMouseDown(event, inputField, dataList) {
     inputField.focus();
 }
 
-function handleKeyDown(event, inputField) {
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-        handleDeleteKeyPress(inputField);
-    } else if (event.key === 'Escape') {
-        handleEscapeKey(inputField);
+function handleInputChange(inputField, event) {
+    const keyPressed = event.inputType;
+
+    if (keyPressed === "deleteContentBackward" || keyPressed === "deleteContentForward") {
+        handleDeleteInput(inputField);
+    } else {
+        handleInput(inputField, countryNames);
     }
 }
-
-function handleTouchDelete(inputField) {
-    const event = new KeyboardEvent('keydown', { key: 'Backspace' });
-    inputField.dispatchEvent(event);
-}
-
-convertFromInput.addEventListener("touchstart", (event) => {
-    handleTouchDelete(convertFromInput);
-});
-
-convertToInput.addEventListener("touchstart", (event) => {
-    handleTouchDelete(convertToInput);
-});
 
 convertFromInput.addEventListener("input", (event) => {
-    if (convertFromInput.value !== lastInputValue) {
-        handleInput(convertFromInput, countryNames);
-        lastInputValue = convertFromInput.value;
-    }
+    handleInputChange(convertFromInput, event);
 });
 
 convertToInput.addEventListener("input", (event) => {
-    if (convertToInput.value !== lastInputValue) {
-        handleInput(convertToInput, countryNames);
-        lastInputValue = convertToInput.value;
-    }
+    handleInputChange(convertToInput, event);
 });
 
 convertFromInput.addEventListener("keydown", (event) => {
-    handleKeyDown(event, convertFromInput);
+    if (event.key === "Escape") {
+        handleEscapeKey(convertFromInput);
+    }
 });
 
 convertToInput.addEventListener("keydown", (event) => {
-    handleKeyDown(event, convertToInput);
+    if (event.key === "Escape") {
+        handleEscapeKey(convertToInput);
+    }
 });
 
 convertFromInput.addEventListener("mousedown", (event) => {
