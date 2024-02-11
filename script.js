@@ -307,15 +307,15 @@ document.getElementById("convert").addEventListener("click", async (event) => {
     if (!navigator.onLine) {
         title = 'Connection Error';
         text = 'Please check your internet connection and try again.';
-    } else if (amountInput.value.trim() === '' || amountInput.value <= 0) {
-        title = 'Invalid amount';
-        text = 'Please enter a valid amount to proceed.';
     } else if (!currencies.hasOwnProperty(convertFromCurrency)) {
         title = 'Currency not selected';
         text = 'Please select the source currency from the list to proceed.';
     } else if (!currencies.hasOwnProperty(convertToCurrency)) {
         title = 'Currency not selected';
         text = 'Please select the target currency from the list to proceed.';
+    } else if (amountInput.value.trim() === '' || amountInput.value <= 0) {
+        title = 'Invalid amount';
+        text = 'Please enter a valid amount to proceed.';
     } else {
         spinner.style.display = "none";
         fromExchangeRate = currencies[convertFromCurrency];
