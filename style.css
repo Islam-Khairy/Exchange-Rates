@@ -1,176 +1,192 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    border: none;
-    outline: none;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
 }
 
 :root {
-    --text-white-color:#e9e3e3;
-    --border-color: #bdbbbb;
+  --text-white-color: #e9e3e3;
+  --border-color: #bdbbbb;
 }
 
 html {
-    font-size: 62.5%;
+  font-size: 62.5%;
 }
 
 body {
-    background: url(backgrounds/6.jpg) center/ cover no-repeat;
-    position: relative;
+  background: url(backgrounds/44.jpg) center/ cover no-repeat;
+  position: relative;
 }
 
 .container {
-    display: flex;
-    justify-content: center;
-    height: 100vh; 
-    width: 100vw;   
-    z-index: 1;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
 }
 
 .container::before {
-	content: "";
-    position: absolute;
-    background: rgba(85, 84, 84, 0.7);
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: -1; 
+  content: '';
+  position: absolute;
+  background: rgba(85, 84, 84, 0.6);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
 }
 
 .sub-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 100%;
-    box-shadow:  0 2rem 1rem rgba(0, 0, 0, 0.1);
-    border-radius: 3rem;
-    border: .1rem solid transparent;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  box-shadow: 0 1rem 5rem 0.1rem rgba(0, 0, 0, 0.4);
+  border-radius: 3rem;
+  border: 0.1rem solid var(--border-color);
 }
 
-.from, .to, .amount {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+datalist option {
+  padding-left: 20px; /* Adjust as needed */
+  background-repeat: no-repeat;
+  background-size: 16px; /* Adjust the size of the flag image */
+  background-position: 3px center; /* Adjust the position of the flag image */
+}
+
+.from,
+.to,
+.amount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .to {
-    margin: 1.5rem 0;
+  margin: 1.5rem 0;
 }
 
 label {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--text-white-color);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-white-color);
 }
 
-#from, #to, #amount {       
-    padding: .5rem;
-    font-size: 1.8rem;
-    font-weight: 600;
-    background: transparent;
-    border: solid .2rem var(--border-color);
-    border-radius: .8rem;
-    box-shadow:  0 2rem 1rem rgba(0, 0, 0, 0.4);
-    text-align: center;
+#from,
+#to,
+#amount {
+  padding: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  background: transparent;
+  border: solid 0.2rem var(--border-color);
+  border-radius: 0.8rem;
+  box-shadow: 0 2rem 1rem rgba(0, 0, 0, 0.4);
+  text-align: center;
 }
 
-#from, #to {
-    width: 40rem;
-    max-width: 100%;
-    height: 4rem;
+#from,
+#to {
+  width: 40rem;
+  max-width: 100%;
+  height: 4rem;
 }
 
 #amount {
-    width: 20rem;
+  width: 20rem;
 }
 
 #convert {
-    width: fit-content;
-    margin: 4rem 0;
-    padding: .5rem 1rem;
-    font-size: 2.2rem;
-    border-radius: 1.2rem;
-    border: .2rem solid var(--border-color);
-    font-weight: 600;
-    color: var(--text-white-color);
-    background-color: transparent;
+  width: fit-content;
+  margin: 4rem 0;
+  padding: 0.5rem 1rem;
+  font-size: 2.2rem;
+  border-radius: 1.2rem;
+  border: 0.2rem solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-white-color);
+  background-color: transparent;
 }
 
 #convert:hover {
-    transform: scale(1.05);
-    cursor: pointer;
+  transform: scale(1.05);
+  cursor: pointer;
 }
 
 #result {
-    height: 5rem;
-    max-width: 100%;
-    font-size: 2.2rem;
-    font-weight: 700;
-    text-align: center;
-    background: transparent;
-    border: solid .2rem var(--border-color);
-    border-radius: 1rem;
-    box-shadow: 0 2rem 1rem rgba(0, 0, 0, 0.4);
-    color: var(--text-white-color);
+  height: 5rem;
+  max-width: 100%;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  background: transparent;
+  border: solid 0.2rem var(--border-color);
+  border-radius: 1rem;
+  box-shadow: 0 2rem 1rem rgba(0, 0, 0, 0.4);
+  color: var(--text-white-color);
 }
 
 #spinner {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: .8rem solid rgba(255, 255, 255, 0.2); 
-    border-top: .8rem solid #bdc3c7;
-    border-radius: 50%;
-    width: 6rem;
-    height: 6rem;
-    animation: spin 2s linear infinite;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 0.8rem solid rgba(255, 255, 255, 0.2);
+  border-top: 0.8rem solid #bdc3c7;
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  animation: spin 2s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .footer {
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    position: fixed;
-    bottom: 1rem;
-    left: 2rem;
-    font-size: 2rem;
-    font-weight: 600;
-    color: black;
-    letter-spacing: .01rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  position: fixed;
+  bottom: 1rem;
+  left: 2rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-white-color);
+  letter-spacing: 0.01rem;
 }
 
-@media (max-width: 767px){
-    html {
-        font-size: 50%;
-    }
+@media (max-width: 767px) {
+  html {
+    font-size: 50%;
+  }
 }
 
-@media (max-width: 390px){
-    html {
-        font-size: 43.75%;
-    }
+@media (max-width: 390px) {
+  html {
+    font-size: 43.75%;
+  }
 }
 
-@media (max-width: 320px){
-    html {
-        font-size: 37.5%;
-    }
+@media (max-width: 320px) {
+  html {
+    font-size: 37.5%;
+  }
 }
 
-@media (max-width: 250px){
-    html {
-        font-size: 31.25%;
-    }
+@media (max-width: 250px) {
+  html {
+    font-size: 31.25%;
+  }
 }
