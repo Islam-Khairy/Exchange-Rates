@@ -33,7 +33,7 @@ body {
 .container::before {
   content: '';
   position: absolute;
-  background: rgba(85, 84, 84, 0.68);
+  background: rgba(85, 84, 84, 0.7);
   top: 0;
   left: 0;
   height: 100%;
@@ -56,9 +56,22 @@ body {
 .currency-icon img {
   outline: none;
   border: none;
-  opacity: 0.5;
+  opacity: 0.45;
   max-width: 100%;
   max-height: 100%;
+  animation: flip 20s linear infinite;
+}
+
+@keyframes flip {
+  0% {
+    transform: perspective(400px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(400px) rotateY(360deg);
+  }
+  100% {
+    transform: perspective(400px) rotateY(0deg);
+  }
 }
 
 .sub-container {
