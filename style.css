@@ -59,18 +59,18 @@ body {
   opacity: 0.4;
   max-width: 100%;
   max-height: 100%;
-  animation: flip-zoom 10s alternate infinite;
+  animation: flip-zoom 10s linear infinite;
 }
 
 @keyframes flip-zoom {
   0% {
-    transform: perspective(400px) rotateY(0deg) scale3d(1, 1, 1);
+    transform: perspective(400px) rotateY(0deg) scale(0.8);
   }
   50% {
-    transform: perspective(400px) rotateY(180deg) scale3d(1.2, 1.2, 1.2);
+    transform: perspective(400px) rotateY(180deg) scale(1.2);
   }
   100% {
-    transform: perspective(400px) rotateY(360deg) scale3d(0.8, 0.8, 0.8);
+    transform: perspective(400px) rotateY(360deg) scale(0.8);
   }
 }
 
