@@ -92,15 +92,15 @@ body {
   border: 0.1rem solid var(--border-color);
 }
 
-.from,
-.to,
-.amount {
+.from-container,
+.to-container,
+.amount-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.to {
+.to-container {
   margin: 1.5rem 0;
 }
 
@@ -144,7 +144,9 @@ label {
   font-weight: 600;
   color: var(--text-white-color);
   background-color: transparent;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
 }
 
 #convert:hover {
@@ -153,7 +155,7 @@ label {
 }
 
 #convert:active {
-  transform: translateY(15%) scale(1.05);
+  transform: translateY(10%) scale(1.05);
 }
 
 #result {

@@ -182,6 +182,14 @@ async function getCurrencies() {
     const response = await fetch(
       `https://v6.exchangerate-api.com/v6/baa3a9e2509c9b674a3486a2/latest/usd?api_key=e62be596`,
     );
+
+    if (response.status === 429) {
+      spinner.style.display = 'block';
+      throw new Error(
+        "the currency conversion service is temporarily unavailable. I am working on it. Please try again shortly.",
+      );
+    }
+
     const data = await response.json();
     currencies = data.conversion_rates;
 
@@ -192,7 +200,12 @@ async function getCurrencies() {
       convertToInput.value = convertToCurrency;
     }
   } catch (error) {
-    console.error('Error fetching currencies:', error);
+    spinner.style.display = 'none';
+    Swal.fire({
+      icon: 'warning',
+      title: 'Sorry',
+      text: error.message,
+    });
   }
 }
 
