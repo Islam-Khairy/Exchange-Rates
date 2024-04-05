@@ -11,6 +11,11 @@ let convertToCurrency;
 let currencies;
 let lastInputValue = '';
 
+let currentApiKeyIndex = 0;
+let switchCount = 0;
+
+const apiKeys = ['c23b91d95249ee14e67f4196', 'baa3a9e2509c9b674a3486a2'];
+
 const countries = [
   { code: 'USD', name: 'United States' },
   { code: 'AED', name: 'United Arab Emirates' },
@@ -179,15 +184,23 @@ countries.sort((a, b) => a.name.localeCompare(b.name));
 
 async function getCurrencies() {
   try {
+    spinner.style.display = 'block';
     const response = await fetch(
-      `https://v6.exchangerate-api.com/v6/baa3a9e2509c9b674a3486a2/latest/usd?api_key=e62be596`,
+      `https://v6.exchangerate-api.com/v6/${apiKeys[currentApiKeyIndex]}/latest/usd`,
     );
 
     if (response.status === 429) {
-      spinner.style.display = 'block';
-      throw new Error(
-        "the currency conversion service is temporarily unavailable. I am working on it. Please try again shortly.",
-      );
+      currentApiKeyIndex = (currentApiKeyIndex + 1) % apiKeys.length;
+      switchCount++;
+
+      if (switchCount === apiKeys.length) {
+        spinner.style.display = 'none';
+        throw new Error(
+          "The currency conversion service is taking a breather. We'll have it back up and running soon. Please try again shortly.",
+        );
+      }
+
+      return await getCurrencies();
     }
 
     const data = await response.json();
@@ -199,8 +212,9 @@ async function getCurrencies() {
       convertFromInput.value = convertFromCurrency;
       convertToInput.value = convertToCurrency;
     }
-  } catch (error) {
+
     spinner.style.display = 'none';
+  } catch (error) {
     Swal.fire({
       icon: 'warning',
       title: 'Sorry',
