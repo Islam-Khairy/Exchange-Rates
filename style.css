@@ -155,7 +155,7 @@ label {
 }
 
 .convert:active {
-  transform: translateY(15%) scale(1.05);
+  transform: translateY(7%) scale(1.05);
 }
 
 #result {
