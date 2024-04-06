@@ -134,7 +134,7 @@ label {
   width: 20rem;
 }
 
-#convert {
+.convert {
   width: fit-content;
   margin: 4rem 0;
   padding: 0.5rem 1rem;
@@ -144,18 +144,18 @@ label {
   font-weight: 600;
   color: var(--text-white-color);
   background-color: transparent;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.3s ease-in-out;
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
 }
 
-#convert:hover {
+.convert:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
 
-#convert:active {
-  transform: translateY(10%) scale(1.05);
+.convert:active {
+  transform: translateY(15%) scale(1.05);
 }
 
 #result {

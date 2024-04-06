@@ -14,15 +14,27 @@ let lastInputValue = '';
 let currentApiKeyIndex = 0;
 let switchCount = 0;
 
-const apiKeys = ['c23b91d95249ee14e67f4196', 'baa3a9e2509c9b674a3486a2'];
+const apiKeys = [
+  'xhN7x3OjAWnHojHDWuVf04hkbOjd8Vbl',
+  'AVqwfxPOj2jM90Nfrb4QDWulUCqaJAIb',
+  'klvfxlrffg0sOXtrbFLv69vRGOWR0t48',
+  'xPD6UqwDIkRvHfeaYUNVmbqdyNIraNtr',
+  'hwWJ08mL8lY1UYTtopaNH5cp3NhQO0Wu',
+  'RX7gXzrz991Hg1R5GEJmWDhwfRtUYjOv',
+  'VNEb0JjV6XWGMRkKn4ym72Ko3w6eaMEZ',
+  'JVUYNsqW30EsVqwglUk5t9pl3W9OYUhX',
+  '8CANQsvPIF1W9B1vBsffM0xBefaaJjwz',
+  'eyf7JqmeQW8AQCWvA5YlKgtHe8G4Cz7M',
+  'Ervp8ggCLrB3NFG7AIBKMADTNDsf8KhG',
+  'HWodTvh70p0KHV6YhpI18NLg57oV5txV',
+  'aLqY1oNdsbXmPAhiWqXBOKCJXpcMpmix',
+  '',
+];
 
 const countries = [
-  { code: 'USD', name: 'United States' },
-  { code: 'AED', name: 'United Arab Emirates' },
   { code: 'AFN', name: 'Afghanistan' },
   { code: 'ALL', name: 'Albania' },
   { code: 'AMD', name: 'Armenia' },
-  { code: 'ANG', name: 'Netherlands Antilles' },
   { code: 'AOA', name: 'Angola' },
   { code: 'ARS', name: 'Argentina' },
   { code: 'AUD', name: 'Australia' },
@@ -57,13 +69,18 @@ const countries = [
   { code: 'DKK', name: 'Denmark' },
   { code: 'DOP', name: 'Dominican Republic' },
   { code: 'DZD', name: 'Algeria' },
+  { code: 'XCD', name: 'East Caribbean Dollar' },
   { code: 'EGP', name: 'Egypt' },
+  { code: 'SVC', name: 'El Salvador' },
   { code: 'ERN', name: 'Eritrea' },
+  { code: 'SZL', name: 'Eswatini' },
   { code: 'ETB', name: 'Ethiopia' },
   { code: 'EUR', name: 'European Union' },
   { code: 'FJD', name: 'Fiji' },
   { code: 'FKP', name: 'Falkland Islands' },
+  { code: 'AED', name: 'United Arab Emirates' },
   { code: 'GBP', name: 'United Kingdom' },
+  { code: 'USD', name: 'United States' },
   { code: 'GEL', name: 'Georgia' },
   { code: 'GGP', name: 'Guernsey' },
   { code: 'GHS', name: 'Ghana' },
@@ -110,6 +127,8 @@ const countries = [
   { code: 'MMK', name: 'Myanmar' },
   { code: 'MNT', name: 'Mongolia' },
   { code: 'MOP', name: 'Macau' },
+  { code: 'MGF', name: 'Madagascar' },
+  { code: 'MMK', name: 'Myanmar (Burma)' },
   { code: 'MRU', name: 'Mauritania' },
   { code: 'MUR', name: 'Mauritius' },
   { code: 'MVR', name: 'Maldives' },
@@ -118,6 +137,7 @@ const countries = [
   { code: 'MYR', name: 'Malaysia' },
   { code: 'MZN', name: 'Mozambique' },
   { code: 'NAD', name: 'Namibia' },
+  { code: 'ANG', name: 'Netherlands Antilles' },
   { code: 'NGN', name: 'Nigeria' },
   { code: 'NIO', name: 'Nicaragua' },
   { code: 'NOK', name: 'Norway' },
@@ -144,13 +164,11 @@ const countries = [
   { code: 'SGD', name: 'Singapore' },
   { code: 'SHP', name: 'Saint Helena' },
   { code: 'SLE', name: 'Sierra Leone' },
-  { code: 'SLL', name: 'Sierra Leone' },
   { code: 'SOS', name: 'Somalia' },
   { code: 'SRD', name: 'Suriname' },
   { code: 'SSP', name: 'South Sudan' },
   { code: 'STN', name: 'Sao Tome and Principe' },
   { code: 'SYP', name: 'Syria' },
-  { code: 'SZL', name: 'Eswatini' },
   { code: 'THB', name: 'Thailand' },
   { code: 'TJS', name: 'Tajikistan' },
   { code: 'TMT', name: 'Turkmenistan' },
@@ -186,7 +204,7 @@ async function getCurrencies() {
   try {
     spinner.style.display = 'block';
     const response = await fetch(
-      `https://v6.exchangerate-api.com/v6/${apiKeys[currentApiKeyIndex]}/latest/usd`,
+      `https://api.currencybeacon.com/v1/latest?api_key=${apiKeys[currentApiKeyIndex]}`,
     );
 
     if (response.status === 429) {
@@ -204,7 +222,7 @@ async function getCurrencies() {
     }
 
     const data = await response.json();
-    currencies = data.conversion_rates;
+    currencies = data.rates;
 
     updateCurrencyOptions();
 
@@ -274,7 +292,6 @@ function handleInput(inputField, countryList) {
 }
 
 function handleEscapeKey(inputField) {
-  console.log('Handling Escape key');
   inputField.value = '';
   if (inputField === convertFromInput) {
     convertFromCurrency = null;
@@ -331,7 +348,7 @@ convertToInput.addEventListener('mousedown', (event) => {
   handleMouseDown(event, convertToInput, toDataList);
 });
 
-document.getElementById('convert').addEventListener('click', async (event) => {
+document.querySelector('.convert').addEventListener('click', async (event) => {
   event.preventDefault();
   spinner.style.display = 'block';
   await getCurrencies();
