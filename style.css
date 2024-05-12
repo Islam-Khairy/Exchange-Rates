@@ -21,7 +21,7 @@ html {
 }
 
 body {
-  background: url(backgrounds/70.jpg) center/ cover no-repeat;
+  background: url(./backgrounds/70.jpg) center/ cover no-repeat;
   position: relative;
 }
 
