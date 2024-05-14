@@ -282,6 +282,7 @@ function handleInput(inputField, countryList) {
   const foundCountry = countryList.find((country) => country.name.toLowerCase() === enteredCountry);
   if (foundCountry) {
     inputField.value = `${foundCountry.name} - ${foundCountry.code}`;
+    inputField.blur()
     if (inputField === convertFromInput) {
       convertFromCurrency = foundCountry.code;
     } else if (inputField === convertToInput) {
@@ -400,7 +401,15 @@ function getValue(amount, fromExchangeRate, toExchangeRate) {
   document.getElementById('result').value = resultText;
 }
 
-getCurrencies();
+window.addEventListener('DOMContentLoaded', () => {
+  convertFromInput.value = "";
+  convertFromCurrency = null;
+  convertToInput.value = "";
+  convertToCurrency = null;
+  amountInput.value = "";
+  document.getElementById('result').value = "";
+  getCurrencies();
+});
 
 var typed = new Typed('.footer', {
   strings: ['Generated with ❤️ by Islam Khairy'],
