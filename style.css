@@ -158,8 +158,7 @@ label {
 }
 
 .convert:active {
-  transform: translateY(7%) scale(1.05);
-  box-shadow: none;
+  transform: translateY(7%) scale(1.05);  
 }
 
 #result {
@@ -228,6 +227,12 @@ label {
   padding: 1.2rem;
   font-weight: 400;
   color: var(--label-color);
+}
+
+@media (max-width: 2048px) {
+  .convert:hover {
+    box-shadow: none;
+  }
 }
 
 @media (max-width: 767px) {
